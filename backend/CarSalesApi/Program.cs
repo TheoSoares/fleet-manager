@@ -1,12 +1,18 @@
 using CarSalesApi.Cars;
 using CarSalesApi.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                       ?? Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddCors(option => option.AddDefaultPolicy(policy =>
 {
     policy.AllowAnyOrigin();

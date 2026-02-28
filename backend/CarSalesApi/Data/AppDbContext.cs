@@ -5,12 +5,15 @@ namespace CarSalesApi.Data;
 
 public class AppDbContext : DbContext
 {
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+    }
     public DbSet<Car> Cars { get; set; }
     public DbSet<CarHistory> CarsHistory { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=cars.sqlite");
         base.OnConfiguring(optionsBuilder);
     }
 
