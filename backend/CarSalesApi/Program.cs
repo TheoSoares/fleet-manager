@@ -29,5 +29,6 @@ app.UseCors();
 app.BuyCarRoutes();
 app.SellCarRoutes();
 app.HistoryCarRoutes();
+app.DashboardRoutes();
 
 app.Run();

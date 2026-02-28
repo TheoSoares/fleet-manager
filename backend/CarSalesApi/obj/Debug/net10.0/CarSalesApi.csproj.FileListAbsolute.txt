@@ -146,3 +146,4 @@
 /home/theosoares/Desktop/CRUD+Dashboard/backend/CarSalesApi/obj/Debug/net10.0/CarSalesApi.pdb
 /home/theosoares/Desktop/CRUD+Dashboard/backend/CarSalesApi/obj/Debug/net10.0/CarSalesApi.genruntimeconfig.cache
 /home/theosoares/Desktop/CRUD+Dashboard/backend/CarSalesApi/obj/Debug/net10.0/ref/CarSalesApi.dll
+/home/theosoares/Desktop/CRUD+Dashboard/backend/CarSalesApi/obj/Debug/net10.0/CarSalesApi.sourcelink.json

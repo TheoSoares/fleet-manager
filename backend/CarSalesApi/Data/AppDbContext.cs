@@ -11,8 +11,6 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source=cars.sqlite");
-        optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
-        optionsBuilder.EnableSensitiveDataLogging();
         base.OnConfiguring(optionsBuilder);
     }
 

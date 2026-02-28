@@ -1,5 +1,7 @@
+using System.Globalization;
 using CarSalesApi.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CarSalesApi.Cars;
 
@@ -142,7 +144,6 @@ public static class CarRoutes
                 string brand = request.Query["brand"];
                 string model = request.Query["model"];
                 string licensePlate = request.Query["license-plate"];
-                string date = request.Query["date"];
 
                 var query = context.Cars
                     .Include(c => c.History)
@@ -185,11 +186,19 @@ public static class CarRoutes
                 {
                     query = query.Where(car => car.LicensePlate.Contains(licensePlate));
                 }
-                
-                if (!string.IsNullOrEmpty(date))
+
+                Console.WriteLine(request.Query["date-start"]);
+                if (DateTime.TryParseExact(request.Query["date-start"], "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                        DateTimeStyles.None, out var dateStart))
                 {
-                    query = query.Where(car => car.Date.Contains(date));
-                }
+                    query = query.Where(car => car.Date >= dateStart);
+                };
+                
+                if (DateTime.TryParseExact(request.Query["date-end"], "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                        DateTimeStyles.None, out var dateEnd))
+                {
+                    query = query.Where(car => car.Date < dateEnd.Date.AddDays(1));
+                };
                 
                 // ordenacao
                 if (!string.IsNullOrEmpty(filterBy))
@@ -236,12 +245,151 @@ public static class CarRoutes
                         car.SoldDescription,
                         OperationId = history.Id,
                         history.Operation,
-                        history.Date
+                        Date = history.Date
                     })
                     .Where(car => car.OperationId == Guid.Parse(id))
                     .SingleOrDefaultAsync(ct);
                 
                 return Results.Ok(query);
+            });
+    }
+
+    public static void DashboardRoutes(this WebApplication app)
+    {
+        app.MapGet("/api/dashboard/top-dashboard-infos", async (AppDbContext context, CancellationToken ct) =>
+        {
+            var profit = await context.Cars.Where(car => car.Sold).Select(car => car.SoldPrice).SumAsync(ct) - await context.Cars.Select(car => car.BoughtPrice).SumAsync(ct);
+
+            var soldVehicles = await context.Cars.Where(car => car.Sold).Select(car => car.Sold).CountAsync(ct);
+            
+            var fleetSize = await context.Cars.Where(car => !car.Sold).Select(car => car.Sold).CountAsync(ct);
+
+            return Results.Ok(new {profit, soldVehicles, fleetSize});
+        });
+
+        app.MapGet("/api/dashboard/last-year-profit",
+            async (HttpRequest request, AppDbContext context, CancellationToken ct) =>
+            {
+                int month =  int.Parse(request.Query["month"]);
+                int year = int.Parse(request.Query["year"]);
+
+                var profit = new List<decimal>();
+
+                for (int i = 0; i < 12; i++)
+                {
+                    var query = context.Cars
+                        .Include(car => car.History)
+                        .SelectMany(c => c.History, (car, history) => new
+                        {
+                            car.BoughtPrice,
+                            car.SoldPrice,
+                            history.Operation,
+                            history.Date
+                        })
+                        .Where(car => car.Date.Month == month)
+                        .Where(car => car.Date.Year == year)
+                        .AsQueryable();
+                    
+                    var monthProfit = await query
+                        .Where(car => car.Operation == CarHistory.OperationType.Sell)
+                        .Select(car => car.SoldPrice)
+                        .SumAsync(ct) - await query
+                        .Where(car => car.Operation == CarHistory.OperationType.Purchase)
+                        .Select(car => car.BoughtPrice)
+                        .SumAsync(ct);
+                    
+                    profit.Add(monthProfit);
+
+                    month -= 1;
+                    if (month == 0)
+                    {
+                        month = 12;
+                        year -= 1;
+                    }
+                }
+
+                profit.Reverse();
+                
+                return Results.Ok(profit);
+            });
+        app.MapGet("/api/dashboard/last-year-spents",
+            async (HttpRequest request, AppDbContext context, CancellationToken ct) =>
+            {
+                int month =  int.Parse(request.Query["month"]);
+                int year = int.Parse(request.Query["year"]);
+
+                var spents = new List<decimal>();
+
+                for (int i = 0; i < 12; i++)
+                {
+                    var monthSpents = await context.Cars
+                        .Include(car => car.History)
+                        .SelectMany(c => c.History, (car, history) => new
+                        {
+                            car.BoughtPrice,
+                            history.Operation,
+                            history.Date
+                        })
+                        .Where(car => car.Operation == CarHistory.OperationType.Purchase)
+                        .Where(car => car.Date.Month == month)
+                        .Where(car => car.Date.Year == year)
+                        .Select(car => car.BoughtPrice)
+                        .SumAsync(ct);
+                    
+                    spents.Add(monthSpents);
+
+                    month -= 1;
+                    if (month == 0)
+                    {
+                        month = 12;
+                        year -= 1;
+                    }
+                }
+
+                spents.Reverse();
+                
+                return Results.Ok(spents);
+            });
+        
+        app.MapGet("/api/dashboard/last-year-sales",
+            async (HttpRequest request, AppDbContext context, CancellationToken ct) =>
+            {
+                int month =  int.Parse(request.Query["month"]);
+                int year = int.Parse(request.Query["year"]);
+
+                var sales = new List<decimal>();
+
+                for (int i = 0; i < 12; i++)
+                {
+                    var monthSales = await context.Cars
+                        .Include(car => car.History)
+                        .SelectMany(c => c.History, (car, history) => new
+                        {
+                            car.SoldPrice,
+                            history.Operation,
+                            history.Date
+                        })
+                        .Where(car => car.Operation == CarHistory.OperationType.Sell)
+                        .Where(car => car.Date.Month == month)
+                        .Where(car => car.Date.Year == year)
+                        .Select(car => car.SoldPrice)
+                        .SumAsync(ct);
+                    
+                    sales.Add(monthSales);
+                    
+                    Console.WriteLine($"Mes: {month} | Ano: {year} | Vendas: {monthSales}");
+
+                    month -= 1;
+                    if (month == 0)
+                    {
+                        month = 12;
+                        year -= 1;
+                    }
+                }
+
+                sales.Reverse();
+                
+                return Results.Ok(sales);
             });
     }
 }
