@@ -1,0 +1,24 @@
+.text-input {
+  color: white;
+  border: 2px solid #8707ff;
+  border-radius: 10px;
+  padding: 10px 25px;
+  background: transparent;
+  font-family: Oswald;
+  width: 15rem;
+}
+
+button {
+  color: white;
+  border: 2px solid #8707ff;
+  border-radius: 10px;
+  padding: 10px 25px;
+  background: transparent;
+  font-family: Oswald;
+  width: 15rem;
+  cursor: grab;
+
+    &:hover {
+    color: gray;
+  }
+}

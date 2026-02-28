@@ -1,0 +1,13 @@
+<main class="bg-[#0f0f11] flex">
+  <app-navbar />
+  <form #form="ngForm" class="flex flex-col w-screen h-screen justify-center items-center p-6 gap-y-5">
+    <input type="text" [(ngModel)]="brand" name="brand" class="text-input" placeholder="Insira a marca...">
+    <input type="text" [(ngModel)]="model" name="model" class="text-input" placeholder="Insira o modelo...">
+    <input type="text" [(ngModel)]="year" name="year" class="text-input" placeholder="Insira o ano...">
+    <input type="text" [(ngModel)]="licensePlate" class="text-input" name="licensePlate" [value]="licensePlate" (input)="onInputLicensePlate($event)" maxlength="8" placeholder="Insira a placa...">
+    <input type="text" [(ngModel)]="color" name="color" class="text-input" placeholder="Insira a cor...">
+    <input type="text" class="text-input" name="price" [value]="formattedPrice" (input)="onInputPrice($event)" placeholder="Insira o valor de compra..." inputmode="numeric">
+    <input type="text" [(ngModel)]="description" name="description" class="text-input" placeholder="Insira a descrição...">
+    <button (click)="carPostRequest(form)">Salvar</button>
+  </form>
+</main>

@@ -1,0 +1,93 @@
+<main class="bg-[#0f0f11] flex">
+  <app-navbar />
+  <div class="flex justify-center items-center w-screen h-screen">
+    <div class="flex flex-col w-[min(90%,80rem)] h-9/12 relative">
+      <div class="flex justify-between w-full h-full min-h-0">
+        <!--Lista de carros-->
+        <div class="flex w-7/10 h-full border-2 border-[#211f23] rounded-2xl min-h-0" id="car-list-bound">
+          <div class="flex flex-col gap-4 overflow-scroll w-full p-8 items-center min-h-0">
+            @if (carList$ | async; as data) {
+              @for (car of data.cars; track $index) {
+                <div class="carListed flex w-4/5 cursor-grab" (click)="selectCar(car.licensePlate)">
+                  <span class="w-1/4 overflow-hidden">{{ car.brand }}</span>
+                  <span class="w-1/4 overflow-hidden">{{ car.model }}</span>
+                  <span class="w-1/4 overflow-hidden">{{ car.year }}</span>
+                  <span class="w-1/4 overflow-hidden">{{ car.licensePlate }}</span>
+                </div>
+              }
+              @empty {
+                <span class="w-full h-full flex items-center justify-center text-white text-4xl text-center">Não há carros para serem exibidos!</span>
+              }
+            }
+            @else {
+            }
+          </div>
+        </div>
+        <!--Filtros-->
+        <div class="w-1/4 h-full border-2 border-[#211f23] rounded-2xl flex flex-col items-center py-5 gap-5 overflow-hidden">
+          <select name="filterBy" [(ngModel)]="filterBy" (ngModelChange)="updateCarList()">
+            <option value="">Selecione a ordenação</option>
+            <option value="Brand">Marca</option>
+            <option value="Model">Modelo</option>
+            <option value="Year">Ano</option>
+            <option value="LicensePlate">Placa</option>
+            <option value="Color">Cor</option>
+            <option value="BoughtPrice">Preço</option>
+          </select>
+          <select name="orderBy" [(ngModel)]="orderBy" (ngModelChange)="updateCarList()">
+            <option value="ascend">Crescente</option>
+            <option value="descend">Decrescente</option>
+          </select>
+          <input type="text" [(ngModel)]="brandFilter" name="brandFilter" (input)="updateCarList()" placeholder="Pesquisar marca...">
+          <input type="text" [(ngModel)]="modelFilter" name="modelFilter" (input)="updateCarList()" placeholder="Pesquisar modelo...">
+          <input type="text" [(ngModel)]="licensePlateFilter" name="licensePlateFilter" (input)="updateCarList()" placeholder="Pesquisar placa...">
+          <span class="text-white w-[90%] flex items-center justify-between flex-wrap">
+            Itens por página:
+            <select [(ngModel)]="itemsPerPage" (ngModelChange)="updateCarList()" name="itemsPerPage" style="width: 30%;">
+              <option value=10>10</option>
+              <option value=25>25</option>
+              <option value=50>50</option>
+              <option value=100>100</option>
+              <option value=200>200</option>
+            </select>
+          </span>
+        </div>
+      </div>
+      <!--Mudar páginas-->
+      <div class="flex text-white w-7/10 px-12 pt-4 justify-between">
+        <span class="font-[open-sans]">Exibindo página {{ page }} de {{ maxPages }}</span>
+        <div class="flex gap-4">
+          <svg xmlns="http://www.w3.org/2000/svg" (click)="changePage('left')" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-grab"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" (click)="changePage('right')" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-grab"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </div>
+      </div>
+      @if (showCarInfos) {
+        <div class="w-full h-full absolute flex items-center justify-center">
+          <div class="bg-[#0f0f11] flex w-4/5 h-4/5 absolute rounded-2xl border-2 border-[#211f23] items-center justify-between p-5">
+            <div class="flex flex-col w-1/2 h-full border-2 text-white font-[oswald] rounded-xl border-[#8707ff]">
+              <div class="flex flex-col justify-between overflow-scroll p-5">
+                @if (selectedCar$ | async; as data) {
+                  <p>Marca: {{ data.brand }}</p>
+                  <p>Modelo: {{ data.model }}</p>
+                  <p>Ano: {{ data.year }}</p>
+                  <p>Placa: {{ data.licensePlate }}</p>
+                  <p>Cor: {{ data.color }}</p>
+                  <p>Preço de Compra: R${{ formattedBoughtPrice }}</p>
+                  <p>Descrição: {{ data.description }}</p>
+                }
+              </div>
+            </div>
+            <div class="flex flex-col w-1/4 h-full justify-between items-end">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-grab" (click)="closeSelectCar()"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              <div class="flex flex-col w-full gap-5">
+                <input type="text" class="text-input" style="width: 100%;" name="price" [value]="formattedPrice" (input)="onInputPrice($event)" placeholder="Insira o valor de venda..." inputmode="numeric">
+                <input type="text" [(ngModel)]="description" name="description" class="text-input" style="width: 100%;" placeholder="Insira a descrição...">
+                <button class="text-white bg-red-600 p-5 w-full rounded-md border-2 cursor-grab font-[oswald] font-bold text-2xl" (click)="sellCar()">VENDER</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</main>
