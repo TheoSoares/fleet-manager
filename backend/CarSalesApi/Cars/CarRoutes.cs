@@ -200,17 +200,21 @@ public static class CarRoutes
                     query = query.Where(car => car.Date < dateEnd.Date.AddDays(1));
                 };
                 
+                
+                
                 // ordenacao
-                if (!string.IsNullOrEmpty(filterBy))
+                if (string.IsNullOrEmpty(filterBy))
                 {
-                    if (orderBy == "descend")
-                    {
-                        query = query.OrderByDescending(e => EF.Property<object>(e, filterBy));
-                    }
-                    else
-                    {
-                        query = query.OrderBy(e => EF.Property<object>(e, filterBy));
-                    }
+                    filterBy = "Date";
+                }
+                
+                if (orderBy == "descend")
+                {
+                    query = query.OrderByDescending(e => EF.Property<object>(e, filterBy));
+                }
+                else
+                {
+                    query = query.OrderBy(e => EF.Property<object>(e, filterBy));
                 }
                 
                 int totalItems = await query.CountAsync(ct);

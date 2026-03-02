@@ -54,7 +54,7 @@
           </select>
           <input type="text" [(ngModel)]="brandFilter" name="brandFilter" (input)="updateCarList()" placeholder="Pesquisar marca...">
           <input type="text" [(ngModel)]="modelFilter" name="modelFilter" (input)="updateCarList()" placeholder="Pesquisar modelo...">
-          <input type="text" [(ngModel)]="licensePlateFilter" name="licensePlateFilter" (input)="updateCarList()" placeholder="Pesquisar placa...">
+          <input type="text" [(ngModel)]="licensePlateFilter" name="licensePlateFilter" [value]="licensePlateFilter" (input)="onInputLicensePlate($event)" maxlength="8" placeholder="Pesquisar placa...">
           <div class="flex items-center justify-between w-[90%] flex-wrap">
             <span class="text-white font-[oswald]">Data Inicial</span>
             <input type="date" [(ngModel)]="dateFilterStart" name="dateFilterStart" (input)="updateCarList()" id="dateFilterStart" style="width: 70%;">

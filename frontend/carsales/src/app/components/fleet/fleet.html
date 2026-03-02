@@ -40,7 +40,7 @@
           </select>
           <input type="text" [(ngModel)]="brandFilter" name="brandFilter" (input)="updateCarList()" placeholder="Pesquisar marca...">
           <input type="text" [(ngModel)]="modelFilter" name="modelFilter" (input)="updateCarList()" placeholder="Pesquisar modelo...">
-          <input type="text" [(ngModel)]="licensePlateFilter" name="licensePlateFilter" (input)="updateCarList()" placeholder="Pesquisar placa...">
+          <input type="text" [(ngModel)]="licensePlateFilter" name="licensePlateFilter" [value]="licensePlateFilter" (input)="onInputLicensePlate($event)" maxlength="8" placeholder="Pesquisar placa...">
           <span class="text-white w-[90%] flex items-center justify-between flex-wrap">
             Itens por página:
             <select [(ngModel)]="itemsPerPage" (ngModelChange)="updateCarList()" name="itemsPerPage" style="width: 30%;">

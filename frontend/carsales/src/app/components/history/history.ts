@@ -98,6 +98,16 @@ export class History implements OnInit {
     })
   }
 
+  onInputLicensePlate(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.licensePlateFilter = input.value.toUpperCase();
+    if (input.value.length == 3) {
+      this.licensePlateFilter = this.licensePlateFilter.concat('-')
+    }
+    
+    this.updateCarList();
+  }
+
   closeSelectCar() {
     this.showCarInfos = false;
     this.formattedBoughtPrice = '';
