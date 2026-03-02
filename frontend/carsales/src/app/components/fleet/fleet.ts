@@ -33,8 +33,8 @@ export class Fleet implements OnInit {
   description: string = '';
 
 
-  http = inject(HttpClient)
-  url: string = 'https://carsales-api-7lvg.onrender.com'
+  http = inject(HttpClient);
+  url: string = 'https://carsales-api-7lvg.onrender.com';
 
   filterBy: string = '';
   orderBy: string = 'ascend';

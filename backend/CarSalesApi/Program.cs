@@ -7,15 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                        ?? Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
-if (string.IsNullOrEmpty(connectionString))
-{
-    Console.WriteLine("❌ ERRO: Nenhuma string de conexão foi encontrada nas variáveis de ambiente!");
-}
-else
-{
-    Console.WriteLine("✅ SUCESSO: String de conexão carregada com sucesso.");
-}
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -41,6 +32,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapFallbackToFile("index.html");
 
 app.UseCors();
 
