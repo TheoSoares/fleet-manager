@@ -1,8 +1,8 @@
-<main class="bg-[#0f0f11] flex font-[oswald]">
+<main class="flex font-[oswald] not-md:flex-col min-h-screen min-w-screen">
   <app-navbar />
-  <div class="flex flex-col w-screen h-screen overflow-scroll items-center">
+  <div class="flex flex-col flex-1 overflow-hidden items-center">
     <!--Dashboard Topo-->
-    <div class="flex flex-col w-[90%] rounded-md border-2 border-[#e4e3e6] bg-[#252228] text-[#f7c1f7] mt-24 cursor-default">
+    <div class="flex flex-col w-[90%] rounded-md border-2 border-[#e4e3e6] bg-[#252228] text-[#f7c1f7] md:mt-24 cursor-default">
       <div class="flex w-full h-1/5 border-b-2 text-2xl items-center justify-center p-6">
         Dashboard
       </div>
@@ -25,7 +25,7 @@
       </div>
     </div>
     <!--Overview & Costs-->
-    <div class="flex w-[90%] gap-8 flex-wrap mt-12 justify-between">
+    <div class="flex w-[90%] gap-8 not-md:flex-col m-12 justify-between">
       <!--Overview-->
       <div class="flex flex-col flex-2 rounded-md border-2 border-[#e4e3e6] bg-[#252228] text-[#f7c1f7] items-center">
         <div class="flex p-4">

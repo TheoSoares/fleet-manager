@@ -108,7 +108,6 @@ export class Dashboard implements AfterViewInit {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        aspectRatio: 2
       }
     })
   }
