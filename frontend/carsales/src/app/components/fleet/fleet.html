@@ -8,11 +8,11 @@
           <div class="flex flex-col gap-y-4 overflow-auto w-full py-5 items-center min-h-0">
             @if (carList$ | async; as data) {
               @for (car of data.cars; track $index) {
-                <div class="carListed flex w-4/5 cursor-grab" (click)="selectCar(car.licensePlate)">
-                  <span class="w-1/4 overflow-hidden">{{ car.brand }}</span>
-                  <span class="w-1/4 overflow-hidden">{{ car.model }}</span>
-                  <span class="w-1/4 overflow-hidden">{{ car.year }}</span>
-                  <span class="w-1/4 overflow-hidden">{{ car.licensePlate }}</span>
+                <div class="carListed flex w-4/5 cursor-grab wrap-break-word" (click)="selectCar(car.licensePlate)">
+                  <span class="flex-1 max-w-1/4">{{ car.brand }}</span>
+                  <span class="flex-1 max-w-1/4">{{ car.model }}</span>
+                  <span class="flex-1 max-w-1/4">{{ car.year }}</span>
+                  <span class="flex-1 max-w-1/4">{{ car.licensePlate }}</span>
                 </div>
               }
               @empty {
@@ -63,22 +63,25 @@
       </div>
       @if (showCarInfos) {
         <div class="w-full h-full absolute flex items-center justify-center">
-          <div class="bg-[#0f0f11] flex w-4/5 h-4/5 absolute rounded-2xl border-2 border-[#211f23] items-center justify-between p-5">
-            <div class="flex flex-col w-1/2 h-full border-2 text-white font-[oswald] rounded-xl border-[#8707ff]">
+          <div class="bg-[#0f0f11] flex not-md:flex-col w-4/5 h-4/5 not-md:h-fit absolute rounded-2xl border-2 border-[#211f23] items-center justify-between p-5">
+            <div class="flex flex-1 w-full justify-end">
+              <svg class="cursor-grab md:hidden" (click)="closeSelectCar()" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </div>
+            <div class="flex flex-col w-1/2 h-full not-md:h-fit not-md:w-[90%] not-md:m-4 border-2 text-white font-[oswald] rounded-xl border-[#8707ff]">
               <div class="flex flex-col justify-between overflow-scroll p-5">
                 @if (selectedCar$ | async; as data) {
-                  <p>Marca: {{ data.brand }}</p>
-                  <p>Modelo: {{ data.model }}</p>
-                  <p>Ano: {{ data.year }}</p>
-                  <p>Placa: {{ data.licensePlate }}</p>
-                  <p>Cor: {{ data.color }}</p>
-                  <p>Preço de Compra: R${{ formattedBoughtPrice }}</p>
-                  <p>Descrição: {{ data.description }}</p>
+                  <span>Marca: {{ data.brand }}</span>
+                  <span>Modelo: {{ data.model }}</span>
+                  <span>Ano: {{ data.year }}</span>
+                  <span>Placa: {{ data.licensePlate }}</span>
+                  <span>Cor: {{ data.color }}</span>
+                  <span>Preço de Compra: R${{ formattedBoughtPrice }}</span>
+                  <span>Descrição: {{ data.description }}</span>
                 }
               </div>
             </div>
-            <div class="flex flex-col w-1/4 h-full justify-between items-end">
-              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-grab" (click)="closeSelectCar()"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            <div class="flex flex-col w-1/4 not-md:w-[90%] h-full justify-between items-end">
+              <svg class="cursor-grab not-md:hidden" (click)="closeSelectCar()" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
               <div class="flex flex-col w-full gap-5">
                 <input type="text" class="text-input" style="width: 100%;" name="price" [value]="formattedPrice" (input)="onInputPrice($event)" placeholder="Insira o valor de venda..." inputmode="numeric">
                 <input type="text" [(ngModel)]="description" name="description" class="text-input" style="width: 100%;" placeholder="Insira a descrição...">

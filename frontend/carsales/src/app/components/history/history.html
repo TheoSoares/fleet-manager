@@ -16,11 +16,11 @@
                   @else {
                     <div class="border-2 border-[#8707ff] rounded-[10px] bg-green-600 w-full h-full" style="width: 5%;"></div>
                   }
-                  <div class="carListed flex w-4/5 cursor-grab" (click)="selectCar(car.operationId)">
-                    <span class="w-1/4 overflow-hidden">{{ car.brand }}</span>
-                    <span class="w-1/4 overflow-hidden">{{ car.model }}</span>
-                    <span class="w-1/4 overflow-hidden">{{ car.year }}</span>
-                    <span class="w-1/4 overflow-hidden">{{ car.licensePlate }}</span>
+                  <div class="carListed flex w-4/5 cursor-grab wrap-break-word" (click)="selectCar(car.operationId)">
+                    <span class="flex-1 max-w-1/4">{{ car.brand }}</span>
+                    <span class="flex-1 max-w-1/4">{{ car.model }}</span>
+                    <span class="flex-1 max-w-1/4">{{ car.year }}</span>
+                    <span class="flex-1 max-w-1/4">{{ car.licensePlate }}</span>
                   </div>
                 </div>
               }
@@ -85,8 +85,11 @@
       </div>
       @if (showCarInfos) {
         <div class="w-full h-full absolute flex items-center justify-center">
-          <div class="bg-[#0f0f11] flex w-4/5 h-4/5 absolute rounded-2xl border-2 border-[#211f23] items-center justify-between p-5">
-            <div class="flex flex-col w-5xl h-full border-2 text-white font-[oswald] rounded-xl border-[#8707ff]">
+          <div class="bg-[#0f0f11] flex not-md:flex-col w-4/5 h-4/5 not-md:h-fit absolute rounded-2xl border-2 border-[#211f23] items-center justify-between p-5">
+            <div class="flex flex-col flex-1 w-full h-full justify-between items-end md:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-grab" (click)="closeSelectCar()"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </div>
+            <div class="flex flex-col flex-3 h-full border-2 not-md:m-4 text-white font-[oswald] rounded-xl border-[#8707ff]">
               <div class="flex flex-col justify-between overflow-scroll p-5">
                 @if (selectedCar$ | async; as data) {
                   <span>Marca: {{ data.brand }}</span>
@@ -109,7 +112,7 @@
                 }
               </div>
             </div>
-            <div class="flex flex-col w-1/4 h-full justify-between items-end">
+            <div class="flex flex-col flex-1 h-full justify-between items-end not-md:hidden">
               <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-grab" (click)="closeSelectCar()"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </div>
           </div>
