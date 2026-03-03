@@ -2,7 +2,7 @@
   <app-navbar />
   <div class="flex justify-center items-center flex-1">
     <div class="flex flex-col md:w-[min(90%,80rem)] not-md:w-[90%] h-9/12 relative not-md:mb-12">
-      <div class="flex justify-between not-md:flex-col-reverse gap-x-[5%] gap-y-[2%] flex-1 min-h-0">
+      <div class="flex justify-between not-md:flex-col-reverse gap-x-[5%] gap-y-5 flex-1 min-h-0">
         <!--Lista de carros-->
         <div class="flex flex-7 h-full border-2 border-[#211f23] rounded-2xl min-h-0">
           <div class="flex flex-col gap-y-4 overflow-auto w-full py-5 items-center min-h-0">
@@ -63,8 +63,8 @@
       </div>
       @if (showCarInfos) {
         <div class="w-full h-full absolute flex items-center justify-center">
-          <div class="bg-[#0f0f11] flex not-md:flex-col w-4/5 h-4/5 not-md:h-fit absolute rounded-2xl border-2 border-[#211f23] items-center justify-between p-5">
-            <div class="flex flex-1 w-full justify-end">
+          <div class="bg-[#0f0f11] flex not-md:flex-col w-4/5 md:h-4/5 absolute rounded-2xl border-2 border-[#211f23] items-center justify-between p-5">
+            <div class="md:hidden flex flex-1 w-full justify-end">
               <svg class="cursor-grab md:hidden" (click)="closeSelectCar()" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </div>
             <div class="flex flex-col w-1/2 h-full not-md:h-fit not-md:w-[90%] not-md:m-4 border-2 text-white font-[oswald] rounded-xl border-[#8707ff]">
